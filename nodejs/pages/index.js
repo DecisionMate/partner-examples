@@ -10,7 +10,7 @@ export default class Home extends React.Component {
     super(props);
 
     this.state = {
-      key: Config.key,
+      partner_id: Config.partner_id,
       secret: Config.secret,
       user_name: Config.name,
       user_email: Config.email,
@@ -24,7 +24,7 @@ export default class Home extends React.Component {
 
   generateUrl = () => {
     const {
-      key,
+      partner_id,
       secret,
       user_name,
       user_email,
@@ -37,24 +37,24 @@ export default class Home extends React.Component {
       share_url: share_url
     };
     console.log(
-      `Generating signed url with partner key “${key}” and payload:`,
+      `Generating signed url with partner partner_id “${partner_id}” and payload:`,
       payload
     );
     // Here's where we build the signature, it's one simple line using the `jsonwebtoken` library. This will create a signed token
     // that we can send as a paramter to our partners api.
     // Once the user opens the link it will be automatically signed in and land directly on the specified research.
     var token = jwt.sign(payload, secret, {
-      algorithm: "HS256"
+      algorithm: "RS256"
     });
     console.log(`Signed Token: ${token}`);
-    const signed_url = `${base_url}/api/campaigns/join?key=${key}&token=${token}`;
+    const signed_url = `${base_url}/api/campaigns/join?partner_id=${partner_id}&token=${token}`;
     this.setState({ signed_url });
   };
 
   render() {
     const { generateUrl } = this;
     const {
-      key,
+      partner_id,
       secret,
       user_name,
       user_email,
@@ -77,9 +77,7 @@ export default class Home extends React.Component {
           <section className="hero is-medium">
             <div className="hero-head section">
               <Nav />
-            </div>
-            <div className="hero-body">
-              <div className="container">
+              <div className="container section">
                 <div className="columns">
                   <div className="column is-half">
                     {" "}
@@ -88,41 +86,43 @@ export default class Home extends React.Component {
                     </h1>
                     <p className="subtitle">Sample node.js integration</p>
                     <Field
-                      label={"Campaign ID"}
+                      label={"Campaign Share ID"}
                       type={"text"}
                       value={share_url}
                       onChange={share_url => this.setState({ share_url })}
                     />
                     <Field
-                      label={"name"}
+                      label={"User name"}
                       type={"name"}
                       value={user_name}
                       onChange={user_name => this.setState({ user_name })}
                     />
                     <Field
-                      label={"email"}
+                      label={"User email"}
                       type={"email"}
                       value={user_email}
                       onChange={user_email => this.setState({ user_email })}
                     />
+                    <hr />
                     <Field
-                      label={"key"}
+                      label={"Partner ID"}
                       type={"text"}
-                      value={key}
-                      onChange={key => this.setState({ key })}
+                      value={partner_id}
+                      onChange={partner_id => this.setState({ partner_id })}
                     />
                     <Field
-                      label={"secret"}
+                      label={"Secret"}
                       type={"password"}
                       value={secret}
                       onChange={secret => this.setState({ secret })}
                     />
                     <Field
-                      label={"base url"}
+                      label={"Base url"}
                       type={"text"}
                       value={base_url}
                       onChange={base_url => this.setState({ base_url })}
                     />
+                    <hr />
                     <div className="field">
                       <button className="button is-dark" onClick={generateUrl}>
                         Generate URL
@@ -131,9 +131,17 @@ export default class Home extends React.Component {
                   </div>
                   <div className="column is-half">
                     <h2 className="title">Signed URL</h2>
-                    <a href={signed_url} className="url" target="_blank">
-                      {signed_url}
-                    </a>
+                    {signed_url ? (
+                      <a href={signed_url} className="url" target="_blank">
+                        {signed_url}
+                      </a>
+                    ) : (
+                      <span>
+                        Complete the parameters on the form with your partner id
+                        and secret combination, then press the “generate signed
+                        url” button.
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
