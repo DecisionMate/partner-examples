@@ -1,3 +1,9 @@
+## Requirements
+
+[Read the docs for updated information](https://docs.decisionmate.app/)
+
+---
+
 ## deployment
 
 ### first login to now
