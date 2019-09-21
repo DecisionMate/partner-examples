@@ -65,12 +65,12 @@ export default class Home extends React.Component {
                       <strong>Mate</strong> partner URL signer API
                     </h1>
                     <p className="subtitle">
-                      Sample node.js integration. To build your own{" "}
+                      Sample node.js client signer. To build your own{" "}
                       <a
                         href="https://docs.decisionmate.app/docs/integrations/"
                         target="_blank"
                       >
-                        visit our documentation
+                        read our documentation
                       </a>
                     </p>
                     <TextArea
