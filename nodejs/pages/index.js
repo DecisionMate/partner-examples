@@ -2,6 +2,7 @@ import React from "react";
 import Head from "next/head";
 import Nav from "../components/nav";
 import Field from "../components/field";
+import TextArea from "../components/textarea";
 import Config from "../components/config";
 const jwt = require("jsonwebtoken");
 
@@ -12,30 +13,17 @@ export default class Home extends React.Component {
     this.state = {
       partner_id: Config.partner_id,
       secret: Config.secret,
-      user_name: Config.name,
-      user_email: Config.email,
-      share_url: Config.share_url,
       base_url: Config.base_url,
-      signed_url: ""
+      signed_url: "",
+      payload:
+        '{"share_url":"ee060cc216", "user_email":"ale+test@decisionmate.app", "user_name":"Ale"}'
     };
 
     this.generateUrl = this.generateUrl.bind(this);
   }
 
   generateUrl = () => {
-    const {
-      partner_id,
-      secret,
-      user_name,
-      user_email,
-      share_url,
-      base_url
-    } = this.state;
-    const payload = {
-      user_name: user_name,
-      user_email: user_email,
-      share_url: share_url
-    };
+    const { partner_id, secret, payload, base_url } = this.state;
     console.log(
       `Generating signed url with partner partner_id “${partner_id}” and payload:`,
       payload
@@ -53,20 +41,12 @@ export default class Home extends React.Component {
 
   render() {
     const { generateUrl } = this;
-    const {
-      partner_id,
-      secret,
-      user_name,
-      user_email,
-      share_url,
-      signed_url,
-      base_url
-    } = this.state;
+    const { partner_id, secret, signed_url, base_url, payload } = this.state;
 
     return (
       <div>
         <Head>
-          <title>Mate partner API example</title>
+          <title>Mate partner URL signer API example</title>
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <link
             rel="stylesheet"
@@ -82,40 +62,25 @@ export default class Home extends React.Component {
                   <div className="column is-half">
                     {" "}
                     <h1 className="title">
-                      <strong>Mate</strong> partner API
+                      <strong>Mate</strong> partner URL signer API
                     </h1>
                     <p className="subtitle">Sample node.js integration</p>
-                    <Field
-                      label={"Campaign Share ID"}
-                      type={"text"}
-                      value={share_url}
-                      onChange={share_url => this.setState({ share_url })}
-                    />
-                    <Field
-                      label={"User name"}
-                      type={"name"}
-                      value={user_name}
-                      onChange={user_name => this.setState({ user_name })}
-                    />
-                    <Field
-                      label={"User email"}
-                      type={"email"}
-                      value={user_email}
-                      onChange={user_email => this.setState({ user_email })}
-                    />
-                    <hr />
+                    <TextArea
+                      label="Payload"
+                      value={payload}
+                      onChange={payload => this.setState({ payload })}
+                    ></TextArea>
                     <Field
                       label={"Partner ID"}
                       type={"text"}
                       value={partner_id}
                       onChange={partner_id => this.setState({ partner_id })}
                     />
-                    <Field
-                      label={"Secret"}
-                      type={"password"}
+                    <TextArea
+                      label={"Secret Private Key"}
                       value={secret}
                       onChange={secret => this.setState({ secret })}
-                    />
+                    ></TextArea>
                     <Field
                       label={"Base url"}
                       type={"text"}
